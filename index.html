@@ -695,8 +695,8 @@ document.getElementById('fileInput').onchange=e=>{const file=e.target.files[0];i
     if(!Array.isArray(cards))throw 0;
     const add=confirm('OK = importierte Karten hinzufügen.\nAbbrechen = vorhandene ersetzen.');
     if(!add){
-      const {data:existing}=await supabase.from('cards').select('id');
-      for(const row of (existing||[])){await supabase.from('cards').delete().eq('id',row.id);}
+      const {data:existing}=await sb.from('cards').select('id');
+      for(const row of (existing||[])){await sb.from('cards').delete().eq('id',row.id);}
     }
     for(const x of cards){
       await addCard({id:x.id||uid(),teststand:x.teststand,datum:x.datum,name:x.name||'',anz:x.anz||'',projekt:x.projekt||''});
