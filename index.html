@@ -312,7 +312,7 @@ async function deleteCard(id){
 
 /* ---------- SUPABASE: Users ---------- */
 async function loadUsersFromDB(){
-  const {data:rows, error} = await supabase.from('users').select('*').order('id');
+  const {data:rows, error} = await sb.from('users').select('*').order('id');
   if(error){console.error(error);return;}
   users = rows.map(r=>({name:r.name, color:r.color}));
   renderLegend();fillUserSelect();
