@@ -12,7 +12,6 @@
   --bg:#e8ebf0; --board:#d6dbe4; --surface:#ffffff; --surface-2:#f6f8fb;
   --ink:#16202e; --muted:#69748a; --faint:#9aa6b8;
   --line:#dde3ec; --line-strong:#c6cedb; --accent:#1f57e0;
-  --minet:#2E75B6; --shost:#4f8a3d; --khafee:#C55A11; --larr:#7A3FB0;
   --radius:13px; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
   --shadow:0 1px 2px rgba(20,32,46,.07),0 10px 26px rgba(20,32,46,.07);
 }
@@ -48,14 +47,10 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .lg-chip:active{cursor:grabbing;transform:scale(.95)}
 .lg-chip.dragging{opacity:.4}
 .dot{width:10px;height:10px;border-radius:50%;flex:none}
-
-/* ---------- TRASH ZONE ---------- */
 .trash-zone{position:fixed;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to bottom,rgba(192,57,43,0),rgba(192,57,43,.12));display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:600;color:#c0392b;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;transform:translateY(20px);z-index:40}
 .trash-zone.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
 .trash-zone.over{background:linear-gradient(to bottom,rgba(192,57,43,.05),rgba(192,57,43,.3));color:#a0211a}
 .trash-zone .trash-icon{font-size:24px}
-
-/* ---------- T-CARD BOARD ---------- */
 .board-scroll{overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow)}
 .board{display:grid;grid-template-columns:74px repeat(4,minmax(190px,1fr));background:var(--board);border:1px solid var(--line-strong);border-radius:var(--radius);min-width:880px;user-select:none}
 .board.month-view{grid-template-columns:74px repeat(4,minmax(120px,1fr));min-width:700px}
@@ -86,15 +81,11 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tcard .stem .pj{font-size:11px;font-weight:500;color:var(--ink);line-height:1.15;word-break:break-word}
 .tcard .stem .anz{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
 .tcard.dragging{opacity:.4}
-
-/* Monatsansicht: kleinere Karten */
 .board.month-view .tcard{width:68px}
 .board.month-view .tcard .head{font-size:10px;padding:4px 4px 5px}
 .board.month-view .tcard .stem .pj{font-size:10px}
 .board.month-view .tcard .stem .anz{font-size:9px}
 .board.month-view .slot{min-height:60px;padding:8px 5px 6px;gap:5px}
-
-/* ---------- LIST ---------- */
 .filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
 .filters select,.filters input{font-family:inherit;font-size:13px;padding:9px 12px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface)}
 .filters input{min-width:220px}
@@ -113,8 +104,6 @@ tbody tr:last-child td{border-bottom:none}
 .rowact .del:hover{color:#c0392b;background:#fdecea}
 .empty{padding:46px 20px;text-align:center;color:var(--muted)}
 .empty strong{display:block;color:var(--ink);font-size:15px;margin-bottom:4px;font-family:'Space Grotesk',sans-serif}
-
-/* ---------- MODAL ---------- */
 .overlay{position:fixed;inset:0;background:rgba(16,24,38,.45);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow-y:auto}
 .overlay.open{display:flex}
 .modal{background:var(--surface);border-radius:16px;width:100%;max-width:460px;box-shadow:0 24px 60px rgba(16,24,38,.3);animation:pop .16s ease;margin:auto 0;flex-shrink:0}
@@ -129,7 +118,6 @@ tbody tr:last-child td{border-bottom:none}
 .check{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer}
 .check input{width:16px;height:16px;accent-color:var(--accent)}
 .modal-foot{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:4px}
-/* user manager */
 .urow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
 .urow input[type=color]{width:30px;height:30px;border:1px solid var(--line-strong);border-radius:8px;padding:0;background:none;cursor:pointer}
 .urow .uname{font-weight:600;flex:1}
@@ -144,6 +132,11 @@ tbody tr:last-child td{border-bottom:none}
 footer{margin-top:24px;color:var(--faint);font-size:12px;text-align:center;line-height:1.7}
 .hidden{display:none!important}
 .hint{font-size:11px;color:var(--faint)}
+.sync-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-left:8px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#e74c3c;transition:background .3s}
+.sync-dot.connected{background:#27ae60}
+.sync-dot.syncing{background:#f39c12;animation:pulse .6s infinite alternate}
+@keyframes pulse{from{opacity:1}to{opacity:.4}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -152,13 +145,13 @@ footer{margin-top:24px;color:var(--faint);font-size:12px;text-align:center;line-
   <div class="topbar">
     <div class="brand">
       <span class="eyebrow">OE411 · AWE / AEMWE Teststände</span>
-      <h1>T-Card Board</h1>
+      <h1>T-Card Board <span class="sync-status"><span class="sync-dot" id="syncDot"></span><span id="syncText">Verbinde…</span></span></h1>
       <p>Steckkarten-Tafel — Personen-Chips oder Karten auf Slots ziehen. Karten nach unten ziehen zum Löschen.</p>
     </div>
     <div class="actions">
       <button class="btn btn-ghost" id="importBtn">Import</button>
       <button class="btn btn-ghost" id="csvBtn">CSV</button>
-      <button class="btn" id="exportBtn">Sichern</button>
+      <button class="btn" id="exportBtn">Sichern (JSON)</button>
       <button class="btn-primary" id="addBtn">+ Neue Karte</button>
       <input type="file" id="fileInput" accept="application/json" class="hidden">
     </div>
@@ -201,15 +194,13 @@ footer{margin-top:24px;color:var(--faint);font-size:12px;text-align:center;line-
     </div>
   </div>
 
-  <footer>Daten werden lokal in diesem Browser gespeichert. Zum Teilen mit dem Team „Sichern" → Datei weitergeben → „Import".</footer>
+  <footer>Daten werden in Echtzeit mit allen Nutzern synchronisiert (Supabase). Zum Offline-Backup „Sichern (JSON)" nutzen.</footer>
 </div>
 
-<!-- TRASH ZONE -->
 <div class="trash-zone" id="trashZone">
   <span class="trash-icon">🗑️</span> Hier ablegen zum Löschen
 </div>
 
-<!-- ENTRY MODAL -->
 <div class="overlay" id="overlay">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <h2 id="modalTitle">Neue Karte</h2>
@@ -236,7 +227,6 @@ footer{margin-top:24px;color:var(--faint);font-size:12px;text-align:center;line-
   </div>
 </div>
 
-<!-- USER MANAGER MODAL -->
 <div class="overlay" id="userOverlay">
   <div class="modal" role="dialog" aria-modal="true">
     <h2>Personen verwalten</h2>
@@ -254,7 +244,19 @@ footer{margin-top:24px;color:var(--faint);font-size:12px;text-align:center;line-
 
 <div class="toast" id="toast"></div>
 
+<!-- ============ SUPABASE SDK ============ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
 <script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ SUPABASE CONFIG — HIER DEINE EIGENEN WERTE EINTRAGEN    ║
+// ╚══════════════════════════════════════════════════════════════╝
+const SUPABASE_URL = https://aujyojflrxsebgeexalu.supabase.co;      // ← ersetzen
+const SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1anlvamZscnhzZWJnZWV4YWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzg2ODksImV4cCI6MjA5NjY1NDY4OX0.KvJOfb2XKuAGRsNdHeKZBJyqkV8UB3BRkqqYfArnNiY;   // ← ersetzen
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ============ CONSTANTS ============
 const STANDS=[
   {key:'Minet', color:'#2E75B6', bg:'#e7f0fa'},
   {key:'SHOST', color:'#4f8a3d', bg:'#eaf4e4'},
@@ -262,30 +264,101 @@ const STANDS=[
   {key:'LARR',  color:'#7A3FB0', bg:'#efe7f7'},
 ];
 const standMap=Object.fromEntries(STANDS.map(s=>[s.key,s]));
-const DEFAULT_USERS=[
-  {name:'Jakob',   color:'#4F46E5'},
-  {name:'Tino',    color:'#DB2777'},
-  {name:'Seyed',   color:'#0D9488'},
-  {name:'Mostafa', color:'#CA8A04'},
-  {name:'Jonas',   color:'#E11D48'},
-  {name:'Karl',    color:'#0891B2'},
-  {name:'Tobias',  color:'#475569'},
-  {name:'Andre',   color:'#DC2626'},
-];
 const PALETTE=['#4F46E5','#DB2777','#0D9488','#CA8A04','#E11D48','#0891B2','#475569','#DC2626','#9333EA','#65A30D','#BE185D','#0EA5E9','#A16207','#16A34A','#7C3AED','#B45309'];
-const LS_KEY='oe411_tcard_v2', LS_USERS='oe411_users_v1';
 const WD=['Mo','Di','Mi','Do','Fr','Sa','So'];
 
-let data=load(), users=loadUsers();
+let data=[], users=[];
 let winStart, editId=null, sortKey='datum', sortDir=1, curView='board', dragId=null, dragUser=null;
 let selecting=false, selStand=null, selStart=0, selEnd=0;
 let viewMode='week';
 
-/* ---------- storage ---------- */
-function load(){try{const r=localStorage.getItem(LS_KEY);if(r)return JSON.parse(r);}catch(e){}return [];}
-function save(d){if(d)data=d;try{localStorage.setItem(LS_KEY,JSON.stringify(data));}catch(e){}}
-function loadUsers(){try{const r=localStorage.getItem(LS_USERS);if(r){const u=JSON.parse(r);if(Array.isArray(u)&&u.length)return u;}}catch(e){}return DEFAULT_USERS.slice();}
-function saveUsers(){try{localStorage.setItem(LS_USERS,JSON.stringify(users));}catch(e){}}
+/* ---------- SYNC STATUS ---------- */
+function setSyncStatus(state){
+  const dot=document.getElementById('syncDot');
+  const txt=document.getElementById('syncText');
+  dot.classList.remove('connected','syncing');
+  if(state==='connected'){dot.classList.add('connected');txt.textContent='Live';}
+  else if(state==='syncing'){dot.classList.add('syncing');txt.textContent='Sync…';}
+  else{txt.textContent='Offline';}
+}
+
+/* ---------- SUPABASE: Cards ---------- */
+async function loadCards(){
+  const {data:rows, error} = await supabase.from('cards').select('*');
+  if(error){console.error(error);setSyncStatus('offline');return;}
+  data = rows.map(r=>({id:r.id, teststand:r.teststand, datum:r.datum, name:r.name, anz:r.anz, projekt:r.projekt}));
+  setSyncStatus('connected');
+  refresh();
+}
+
+async function addCard(card){
+  setSyncStatus('syncing');
+  const {id, ...rest} = card;
+  const {error} = await supabase.from('cards').insert({id, ...rest});
+  if(error) console.error(error);
+}
+
+async function updateCard(id, updates){
+  setSyncStatus('syncing');
+  const {error} = await supabase.from('cards').update(updates).eq('id',id);
+  if(error) console.error(error);
+}
+
+async function deleteCard(id){
+  setSyncStatus('syncing');
+  const {error} = await supabase.from('cards').delete().eq('id',id);
+  if(error) console.error(error);
+}
+
+/* ---------- SUPABASE: Users ---------- */
+async function loadUsersFromDB(){
+  const {data:rows, error} = await supabase.from('users').select('*').order('id');
+  if(error){console.error(error);return;}
+  users = rows.map(r=>({name:r.name, color:r.color}));
+  renderLegend();fillUserSelect();
+}
+
+async function addUserToDB(name, color){
+  const {error} = await supabase.from('users').insert({name, color});
+  if(error) console.error(error);
+}
+
+async function updateUserColor(name, color){
+  const {error} = await supabase.from('users').update({color}).eq('name',name);
+  if(error) console.error(error);
+}
+
+async function removeUserFromDB(name){
+  const {error} = await supabase.from('users').delete().eq('name',name);
+  if(error) console.error(error);
+}
+
+/* ---------- SUPABASE: Realtime ---------- */
+function subscribeRealtime(){
+  supabase.channel('cards-changes')
+    .on('postgres_changes',{event:'*',schema:'public',table:'cards'}, payload=>{
+      if(payload.eventType==='INSERT'){
+        const r=payload.new;
+        if(!data.find(x=>x.id===r.id)) data.push({id:r.id,teststand:r.teststand,datum:r.datum,name:r.name,anz:r.anz,projekt:r.projekt});
+      } else if(payload.eventType==='UPDATE'){
+        const r=payload.new;
+        const idx=data.findIndex(x=>x.id===r.id);
+        if(idx>=0) data[idx]={id:r.id,teststand:r.teststand,datum:r.datum,name:r.name,anz:r.anz,projekt:r.projekt};
+      } else if(payload.eventType==='DELETE'){
+        const r=payload.old;
+        data=data.filter(x=>x.id!==r.id);
+      }
+      setSyncStatus('connected');
+      refresh();
+    })
+    .on('postgres_changes',{event:'*',schema:'public',table:'users'}, payload=>{
+      // Bei jeder User-Änderung komplett neu laden
+      loadUsersFromDB().then(()=>refresh());
+    })
+    .subscribe(status=>{
+      if(status==='SUBSCRIBED') setSyncStatus('connected');
+    });
+}
 
 /* ---------- helpers ---------- */
 function uid(){return 'e'+Date.now()+Math.random().toString(36).slice(2,6);}
@@ -307,13 +380,12 @@ function hideTrash(){trashZone.classList.remove('visible','over');}
 trashZone.addEventListener('dragover',ev=>{ev.preventDefault();trashZone.classList.add('over');});
 trashZone.addEventListener('dragleave',()=>{trashZone.classList.remove('over');});
 trashZone.addEventListener('drop',ev=>{
-  ev.preventDefault();
-  hideTrash();
+  ev.preventDefault();hideTrash();
   if(dragId){
     const rec=data.find(x=>x.id===dragId);
     const name=rec?rec.name:'';
-    data=data.filter(x=>x.id!==dragId);
-    save();renderBoard();toast('Karte'+(name?' von '+name:'')+' gelöscht');
+    deleteCard(dragId);
+    toast('Karte'+(name?' von '+name:'')+' gelöscht');
     dragId=null;
   }
   dragUser=null;
@@ -327,8 +399,7 @@ function renderBoard(){
   if(viewMode==='month') board.classList.add('month-view');
   if(viewMode==='week') board.classList.add('week-view');
 
-  let days=[];
-  let label='';
+  let days=[];let label='';
   const monatNamen=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 
   if(viewMode==='week'){
@@ -337,7 +408,7 @@ function renderBoard(){
     label='KW '+kw+'  ·  '+fmtDate(toISO(days[0]))+' – '+fmtDate(toISO(days[4]));
   } else if(viewMode==='2week'){
     days=[...Array(14)].map((_,i)=>addDays(winStart,i));
-    const kw1=isoWeek(days[0]), kw2=isoWeek(days[7]);
+    const kw1=isoWeek(days[0]),kw2=isoWeek(days[7]);
     label='KW '+kw1+'–'+kw2+'  ·  '+fmtDate(toISO(days[0]))+' – '+fmtDate(toISO(days[13]));
   } else {
     const ref=new Date(winStart);
@@ -354,19 +425,14 @@ function renderBoard(){
 
   const corner=document.createElement('div');
   corner.className='cell corner';
-  if(viewMode==='month'){
-    const ref=new Date(winStart);
-    corner.textContent=monatNamen[ref.getMonth()].slice(0,3).toUpperCase();
-  } else {
-    corner.textContent='KW '+isoWeek(days[0]);
-  }
+  if(viewMode==='month'){const ref=new Date(winStart);corner.textContent=monatNamen[ref.getMonth()].slice(0,3).toUpperCase();}
+  else{corner.textContent='KW '+isoWeek(days[0]);}
   board.appendChild(corner);
 
   STANDS.forEach(s=>{
-    const n=data.filter(e=>e.teststand===s.key && days.some(d=>toISO(d)===e.datum)).length;
+    const n=data.filter(e=>e.teststand===s.key&&days.some(d=>toISO(d)===e.datum)).length;
     const h=document.createElement('div');
-    h.className='cell rackhead';
-    h.style.background=s.color;
+    h.className='cell rackhead';h.style.background=s.color;
     h.innerHTML=esc(s.key)+'<span class="cnt">'+n+'</span>';
     board.appendChild(h);
   });
@@ -375,19 +441,9 @@ function renderBoard(){
   data.forEach(e=>{(byKey[e.datum+'|'+e.teststand]=byKey[e.datum+'|'+e.teststand]||[]).push(e);});
 
   let lastKW=null;
-
   days.forEach((d,i)=>{
-    const iso=toISO(d);
-    const we=d.getDay()===0||d.getDay()===6;
-    const kw=isoWeek(d);
-
-    if(viewMode!=='week' && kw!==lastKW){
-      lastKW=kw;
-      const band=document.createElement('div');
-      band.className='kwband';
-      band.textContent='KW '+kw;
-      board.appendChild(band);
-    }
+    const iso=toISO(d);const we=d.getDay()===0||d.getDay()===6;const kw=isoWeek(d);
+    if(viewMode!=='week'&&kw!==lastKW){lastKW=kw;const band=document.createElement('div');band.className='kwband';band.textContent='KW '+kw;board.appendChild(band);}
 
     const lab=document.createElement('div');
     lab.className='cell daylab'+(we?' we':'')+(iso===todayISO?' today':'');
@@ -406,16 +462,13 @@ function renderBoard(){
       cell.addEventListener('drop',ev=>{
         ev.preventDefault();cell.classList.remove('drop');
         if(dragUser){
-          const newEntry={id:uid(),teststand:cell.dataset.stand,datum:cell.dataset.iso,name:dragUser,anz:'',projekt:''};
-          data.push(newEntry);
-          save();renderBoard();toast('Karte für '+dragUser+' erstellt');
-          dragUser=null;
-          return;
+          const newId=uid();
+          addCard({id:newId,teststand:cell.dataset.stand,datum:cell.dataset.iso,name:dragUser,anz:'',projekt:''});
+          toast('Karte für '+dragUser+' erstellt');dragUser=null;return;
         }
         if(dragId){
-          const rec=data.find(x=>x.id===dragId);
-          if(rec){rec.datum=cell.dataset.iso;rec.teststand=cell.dataset.stand;save();renderBoard();toast('Karte umgesteckt');}
-          dragId=null;
+          updateCard(dragId,{datum:cell.dataset.iso,teststand:cell.dataset.stand});
+          toast('Karte umgesteckt');dragId=null;
         }
       });
       board.appendChild(cell);
@@ -432,18 +485,17 @@ function makeCard(e){
   c.addEventListener('click',ev=>{ev.stopPropagation();if(!c._moved)openModal(e.id);c._moved=false;});
   c.addEventListener('dragstart',ev=>{
     dragId=e.id;dragUser=null;c._moved=true;c.classList.add('dragging');
-    ev.dataTransfer.effectAllowed='move';ev.dataTransfer.setData('text/plain',e.id);
-    showTrash();
+    ev.dataTransfer.effectAllowed='move';ev.dataTransfer.setData('text/plain',e.id);showTrash();
   });
   c.addEventListener('dragend',()=>{c.classList.remove('dragging');hideTrash();});
   return c;
 }
 
-/* multi-day selection on the board */
+/* multi-day selection */
 function paintSel(){
-  const a=Math.min(selStart,selEnd), b=Math.max(selStart,selEnd);
+  const a=Math.min(selStart,selEnd),b=Math.max(selStart,selEnd);
   document.querySelectorAll('#board .slot').forEach(c=>{
-    const on=c.dataset.stand===selStand && +c.dataset.dayidx>=a && +c.dataset.dayidx<=b;
+    const on=c.dataset.stand===selStand&&+c.dataset.dayidx>=a&&+c.dataset.dayidx<=b;
     c.classList.toggle('sel',on);
   });
 }
@@ -453,8 +505,7 @@ function initBoardSelection(){
   board.addEventListener('mousedown',ev=>{
     const slot=ev.target.closest('.slot');
     if(!slot||ev.target.closest('.tcard'))return;
-    ev.preventDefault();
-    selecting=true;selStand=slot.dataset.stand;selStart=+slot.dataset.dayidx;selEnd=selStart;paintSel();
+    ev.preventDefault();selecting=true;selStand=slot.dataset.stand;selStart=+slot.dataset.dayidx;selEnd=selStart;paintSel();
   });
   board.addEventListener('mouseover',ev=>{
     if(!selecting)return;const slot=ev.target.closest('.slot');
@@ -463,23 +514,12 @@ function initBoardSelection(){
   });
   document.addEventListener('mouseup',()=>{
     if(!selecting)return;selecting=false;
-    const a=Math.min(selStart,selEnd),b=Math.max(selStart,selEnd);
-    clearSel();
+    const a=Math.min(selStart,selEnd),b=Math.max(selStart,selEnd);clearSel();
     let days=[];
-    if(viewMode==='week'){
-      days=[...Array(5)].map((_,i)=>addDays(winStart,i));
-    } else if(viewMode==='2week'){
-      days=[...Array(14)].map((_,i)=>addDays(winStart,i));
-    } else {
-      const ref=new Date(winStart);
-      const firstOfMonth=new Date(ref.getFullYear(),ref.getMonth(),1);
-      const lastOfMonth=new Date(ref.getFullYear(),ref.getMonth()+1,0);
-      const start=monday(firstOfMonth);
-      let d=new Date(start);
-      while(d<=lastOfMonth){days.push(new Date(d));d=addDays(d,1);}
-    }
-    const von=toISO(days[a]||days[0]);
-    const bis=toISO(days[b]||days[days.length-1]);
+    if(viewMode==='week') days=[...Array(5)].map((_,i)=>addDays(winStart,i));
+    else if(viewMode==='2week') days=[...Array(14)].map((_,i)=>addDays(winStart,i));
+    else{const ref=new Date(winStart);const firstOfMonth=new Date(ref.getFullYear(),ref.getMonth(),1);const lastOfMonth=new Date(ref.getFullYear(),ref.getMonth()+1,0);const start=monday(firstOfMonth);let d=new Date(start);while(d<=lastOfMonth){days.push(new Date(d));d=addDays(d,1);}}
+    const von=toISO(days[a]||days[0]);const bis=toISO(days[b]||days[days.length-1]);
     openModal(null,von,selStand,a!==b?bis:null);
   });
 }
@@ -494,7 +534,7 @@ function renderListHead(){
   document.querySelectorAll('#theadRow th[data-k]').forEach(th=>{th.onclick=()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}renderList();};});
 }
 function renderList(){
-  const stand=document.getElementById('fStand').value, q=document.getElementById('fSearch').value.trim().toLowerCase();
+  const stand=document.getElementById('fStand').value,q=document.getElementById('fSearch').value.trim().toLowerCase();
   let rows=data.filter(e=>(!stand||e.teststand===stand)&&(!q||(e.name||'').toLowerCase().includes(q)||(e.projekt||'').toLowerCase().includes(q)));
   rows.forEach(e=>{const dt=parseISO(e.datum);e._kw=isoWeek(dt);e._tag=WD[(dt.getDay()+6)%7];});
   rows.sort((a,b)=>{let va,vb;if(sortKey==='kw'){va=a._kw;vb=b._kw;}else if(sortKey==='tag'){va=a.datum;vb=b.datum;}else{va=(a[sortKey]||'');vb=(b[sortKey]||'');}if(va<vb)return -sortDir;if(va>vb)return sortDir;return a.datum<b.datum?-1:1;});
@@ -508,7 +548,7 @@ function renderList(){
       '</td><td><div class="rowact"><button data-edit="'+e.id+'">Bearb.</button><button class="del" data-del="'+e.id+'">×</button></div></td></tr>';
   }).join('');
   document.querySelectorAll('#listBody [data-edit]').forEach(b=>b.onclick=()=>openModal(b.dataset.edit));
-  document.querySelectorAll('#listBody [data-del]').forEach(b=>b.onclick=()=>{if(confirm('Diese Karte löschen?')){data=data.filter(x=>x.id!==b.dataset.del);save();refresh();toast('Karte gelöscht');}});
+  document.querySelectorAll('#listBody [data-del]').forEach(b=>b.onclick=()=>{if(confirm('Diese Karte löschen?')){deleteCard(b.dataset.del);toast('Karte gelöscht');}});
 }
 
 /* ---------- LEGEND + USER MANAGER ---------- */
@@ -520,19 +560,12 @@ function fillUserSelect(){
 function renderLegend(){
   const wrap=document.getElementById('userLegend');
   wrap.innerHTML=users.map(u=>'<span class="lg-chip" draggable="true" data-user="'+esc(u.name)+'"><span class="dot" style="background:'+u.color+'"></span>'+esc(u.name)+'</span>').join('')||'<span class="hint">Keine Personen angelegt</span>';
-
   wrap.querySelectorAll('.lg-chip[data-user]').forEach(chip=>{
     chip.addEventListener('dragstart',ev=>{
-      dragUser=chip.dataset.user;
-      dragId=null;
-      chip.classList.add('dragging');
-      ev.dataTransfer.effectAllowed='copy';
-      ev.dataTransfer.setData('text/plain','user:'+chip.dataset.user);
+      dragUser=chip.dataset.user;dragId=null;chip.classList.add('dragging');
+      ev.dataTransfer.effectAllowed='copy';ev.dataTransfer.setData('text/plain','user:'+chip.dataset.user);
     });
-    chip.addEventListener('dragend',()=>{
-      chip.classList.remove('dragging');
-      dragUser=null;
-    });
+    chip.addEventListener('dragend',()=>{chip.classList.remove('dragging');dragUser=null;});
   });
 }
 function renderUserList(){
@@ -540,21 +573,24 @@ function renderUserList(){
   wrap.innerHTML=users.map(u=>{const cnt=data.filter(e=>e.name===u.name).length;
     return '<div class="urow"><input type="color" value="'+u.color+'" data-color="'+esc(u.name)+'"><span class="uname">'+esc(u.name)+'</span><span class="ucnt">'+cnt+(cnt===1?' Karte':' Karten')+'</span><button data-remove="'+esc(u.name)+'">Entfernen</button></div>';
   }).join('')||'<p class="hint">Noch keine Personen.</p>';
-  wrap.querySelectorAll('input[data-color]').forEach(inp=>inp.oninput=()=>{const u=users.find(x=>x.name===inp.dataset.color);if(u){u.color=inp.value;saveUsers();renderLegend();if(curView==='board')renderBoard();else renderList();}});
+  wrap.querySelectorAll('input[data-color]').forEach(inp=>inp.oninput=()=>{
+    const u=users.find(x=>x.name===inp.dataset.color);
+    if(u){u.color=inp.value;updateUserColor(u.name,inp.value);}
+  });
   wrap.querySelectorAll('button[data-remove]').forEach(b=>b.onclick=()=>{
-    const name=b.dataset.remove, cnt=data.filter(e=>e.name===name).length;
-    if(cnt && !confirm(name+' hat noch '+cnt+' Karten. Person trotzdem entfernen? Die Karten bleiben erhalten.'))return;
-    users=users.filter(u=>u.name!==name);saveUsers();renderUserList();renderLegend();fillUserSelect();if(curView==='board')renderBoard();else renderList();toast('Person entfernt');
+    const name=b.dataset.remove,cnt=data.filter(e=>e.name===name).length;
+    if(cnt&&!confirm(name+' hat noch '+cnt+' Karten. Person trotzdem entfernen?'))return;
+    removeUserFromDB(name);toast('Person entfernt');
   });
 }
 function openUserMgr(){document.getElementById('newUserColor').value=nextPaletteColor();document.getElementById('newUserName').value='';renderUserList();document.getElementById('userOverlay').classList.add('open');setTimeout(()=>document.getElementById('newUserName').focus(),60);}
-document.getElementById('addUserBtn').onclick=()=>{
-  const name=document.getElementById('newUserName').value.trim(), color=document.getElementById('newUserColor').value;
+document.getElementById('addUserBtn').onclick=async()=>{
+  const name=document.getElementById('newUserName').value.trim(),color=document.getElementById('newUserColor').value;
   if(!name){toast('Bitte einen Namen eingeben');return;}
   if(users.some(u=>u.name.toLowerCase()===name.toLowerCase())){toast('Name existiert bereits');return;}
-  users.push({name,color});saveUsers();renderUserList();renderLegend();fillUserSelect();
+  await addUserToDB(name,color);
   document.getElementById('newUserName').value='';document.getElementById('newUserColor').value=nextPaletteColor();
-  if(curView==='board')renderBoard();else renderList();toast('Person hinzugefügt');
+  toast('Person hinzugefügt');
 };
 document.getElementById('newUserName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('addUserBtn').click();}});
 document.getElementById('userDone').onclick=()=>document.getElementById('userOverlay').classList.remove('open');
@@ -575,46 +611,46 @@ function openModal(id,presetDate,presetStand,presetEnd){
   document.getElementById('toWrap').style.display=isNew?'':'none';
   document.getElementById('wdWrap').style.display=isNew?'':'none';
   const f=document.getElementById('entryForm');
-  if(id){const e=data.find(x=>x.id===id);fmStand.value=e.teststand;fmDate.value=e.datum;fmDateTo.value='';fmName.value=e.name||'';fmAnz.value=e.anz||'';fmProj.value=e.projekt||'';}
+  if(id){const e=data.find(x=>x.id===id);if(!e)return;fmStand.value=e.teststand;fmDate.value=e.datum;fmDateTo.value='';fmName.value=e.name||'';fmAnz.value=e.anz||'';fmProj.value=e.projekt||'';}
   else{f.reset();fmStand.value=presetStand||STANDS[0].key;fmDate.value=presetDate||toISO(new Date());fmDateTo.value=presetEnd||'';fmWd.checked=true;if(users[0])fmName.value=users[0].name;}
   document.getElementById('overlay').classList.add('open');
   setTimeout(()=>fmName.focus(),60);
 }
 function closeModal(){document.getElementById('overlay').classList.remove('open');editId=null;}
-document.getElementById('entryForm').addEventListener('submit',ev=>{
+document.getElementById('entryForm').addEventListener('submit',async ev=>{
   ev.preventDefault();
   const base={teststand:fmStand.value,name:fmName.value,anz:fmAnz.value.trim(),projekt:fmProj.value.trim()};
-  if(editId){Object.assign(data.find(x=>x.id===editId),base,{datum:fmDate.value});toast('Karte aktualisiert');}
-  else{
-    const von=fmDate.value, bis=fmDateTo.value;
+  if(editId){
+    await updateCard(editId,{...base,datum:fmDate.value});
+    toast('Karte aktualisiert');
+  } else {
+    const von=fmDate.value,bis=fmDateTo.value;
     let dates=[von];
-    if(bis && bis>=von){dates=[];let d=parseISO(von),end=parseISO(bis);
+    if(bis&&bis>=von){dates=[];let d=parseISO(von),end=parseISO(bis);
       while(d<=end){const dow=d.getDay();if(!fmWd.checked||(dow!==0&&dow!==6))dates.push(toISO(d));d=addDays(d,1);}}
     if(!dates.length)dates=[von];
-    dates.forEach(dt=>data.push({id:uid(),...base,datum:dt}));
+    for(const dt of dates){await addCard({id:uid(),...base,datum:dt});}
     toast(dates.length>1?dates.length+' Karten angelegt':'Karte angelegt');
     winStart=monday(parseISO(von));
   }
-  save();closeModal();if(editId===null){}else{winStart=monday(parseISO(fmDate.value));}
-  refresh();
+  closeModal();
 });
-document.getElementById('delEntry').onclick=()=>{if(editId&&confirm('Diese Karte löschen?')){data=data.filter(x=>x.id!==editId);save();closeModal();refresh();toast('Karte gelöscht');}};
+document.getElementById('delEntry').onclick=()=>{if(editId&&confirm('Diese Karte löschen?')){deleteCard(editId);closeModal();toast('Karte gelöscht');}};
 document.getElementById('cancelBtn').onclick=closeModal;
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();document.getElementById('userOverlay').classList.remove('open');}});
 
 /* ---------- toolbar ---------- */
 document.getElementById('addBtn').onclick=()=>openModal();
-
 document.getElementById('prevW').onclick=()=>{
-  if(viewMode==='week') winStart=addDays(winStart,-7);
-  else if(viewMode==='2week') winStart=addDays(winStart,-14);
+  if(viewMode==='week')winStart=addDays(winStart,-7);
+  else if(viewMode==='2week')winStart=addDays(winStart,-14);
   else{const ref=new Date(winStart);winStart=monday(new Date(ref.getFullYear(),ref.getMonth()-1,1));}
   renderBoard();
 };
 document.getElementById('nextW').onclick=()=>{
-  if(viewMode==='week') winStart=addDays(winStart,7);
-  else if(viewMode==='2week') winStart=addDays(winStart,14);
+  if(viewMode==='week')winStart=addDays(winStart,7);
+  else if(viewMode==='2week')winStart=addDays(winStart,14);
   else{const ref=new Date(winStart);winStart=monday(new Date(ref.getFullYear(),ref.getMonth()+1,1));}
   renderBoard();
 };
@@ -654,14 +690,22 @@ document.getElementById('csvBtn').onclick=()=>{
 };
 document.getElementById('importBtn').onclick=()=>document.getElementById('fileInput').click();
 document.getElementById('fileInput').onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();
-  r.onload=()=>{try{const imp=JSON.parse(r.result);
+  r.onload=async()=>{try{const imp=JSON.parse(r.result);
     const cards=Array.isArray(imp)?imp:(imp.cards||[]);
     if(!Array.isArray(cards))throw 0;
     const add=confirm('OK = importierte Karten hinzufügen.\nAbbrechen = vorhandene ersetzen.');
-    const clean=cards.map(x=>({id:x.id||uid(),teststand:x.teststand,datum:x.datum,name:x.name||'',anz:x.anz||'',projekt:x.projekt||''}));
-    data=add?data.concat(clean):clean;
-    if(imp.users&&Array.isArray(imp.users)&&imp.users.length){const names=new Set(users.map(u=>u.name));imp.users.forEach(u=>{if(u&&u.name&&!names.has(u.name)){users.push({name:u.name,color:u.color||nextPaletteColor()});}});saveUsers();renderLegend();fillUserSelect();}
-    save();refresh();toast(clean.length+' Karten importiert');
+    if(!add){
+      const {data:existing}=await supabase.from('cards').select('id');
+      for(const row of (existing||[])){await supabase.from('cards').delete().eq('id',row.id);}
+    }
+    for(const x of cards){
+      await addCard({id:x.id||uid(),teststand:x.teststand,datum:x.datum,name:x.name||'',anz:x.anz||'',projekt:x.projekt||''});
+    }
+    if(imp.users&&Array.isArray(imp.users)){
+      const names=new Set(users.map(u=>u.name));
+      for(const u of imp.users){if(u&&u.name&&!names.has(u.name))await addUserToDB(u.name,u.color||nextPaletteColor());}
+    }
+    toast(cards.length+' Karten importiert');
   }catch(err){toast('Datei konnte nicht gelesen werden');}e.target.value='';};
   r.readAsText(file);};
 function dl(blob,name){const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);}
@@ -671,9 +715,13 @@ function refresh(){if(curView==='board')renderBoard();else{renderListHead();rend
 function defaultWin(){return monday(new Date());}
 fillStandSelects();fillUserSelect();renderListHead();renderLegend();
 winStart=defaultWin();
-saveUsers();save();
-refresh();
 initBoardSelection();
+
+// Starte Supabase
+setSyncStatus('syncing');
+loadUsersFromDB();
+loadCards();
+subscribeRealtime();
 </script>
 </body>
 </html>
