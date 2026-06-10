@@ -643,19 +643,32 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();docume
 /* ---------- toolbar ---------- */
 document.getElementById('addBtn').onclick=()=>openModal();
 document.getElementById('prevW').onclick=()=>{
-  if(viewMode==='week')winStart=addDays(winStart,-7);
-  else if(viewMode==='2week')winStart=addDays(winStart,-14);
-  else{const ref=new Date(winStart);winStart=monday(new Date(ref.getFullYear(),ref.getMonth()-1,1));}
+  if(viewMode==='week') winStart=addDays(winStart,-7);
+  else if(viewMode==='2week') winStart=addDays(winStart,-14);
+  else {
+    const ref=new Date(winStart);
+    winStart=new Date(ref.getFullYear(), ref.getMonth()-1, 1);  // ← geändert
+  }
   renderBoard();
 };
 document.getElementById('nextW').onclick=()=>{
-  if(viewMode==='week')winStart=addDays(winStart,7);
-  else if(viewMode==='2week')winStart=addDays(winStart,14);
-  else{const ref=new Date(winStart);winStart=monday(new Date(ref.getFullYear(),ref.getMonth()+1,1));}
+  if(viewMode==='week') winStart=addDays(winStart,7);
+  else if(viewMode==='2week') winStart=addDays(winStart,14);
+  else {
+    const ref=new Date(winStart);
+    winStart=new Date(ref.getFullYear(), ref.getMonth()+1, 1);  // ← geändert
+  }
   renderBoard();
 };
-document.getElementById('todayBtn').onclick=()=>{winStart=monday(new Date());renderBoard();};
-
+document.getElementById('todayBtn').onclick=()=>{
+  if(viewMode==='month'){
+    const now=new Date();
+    winStart=new Date(now.getFullYear(), now.getMonth(), 1);  // ← geändert
+  } else {
+    winStart=monday(new Date());
+  }
+  renderBoard();
+};
 function updateViewToggle(){
   document.getElementById('viewWeek').classList.toggle('on',viewMode==='week');
   document.getElementById('view2Week').classList.toggle('on',viewMode==='2week');
@@ -663,7 +676,13 @@ function updateViewToggle(){
 }
 document.getElementById('viewWeek').onclick=()=>{viewMode='week';updateViewToggle();winStart=monday(new Date());renderBoard();};
 document.getElementById('view2Week').onclick=()=>{viewMode='2week';updateViewToggle();winStart=monday(new Date());renderBoard();};
-document.getElementById('viewMonth').onclick=()=>{viewMode='month';updateViewToggle();winStart=monday(new Date());renderBoard();};
+document.getElementById('viewMonth').onclick=()=>{
+  viewMode='month';
+  updateViewToggle();
+  const now=new Date();
+  winStart=new Date(now.getFullYear(), now.getMonth(), 1);  // ← geändert
+  renderBoard();
+};
 
 document.getElementById('tabBoard').onclick=()=>switchView('board');
 document.getElementById('tabList').onclick=()=>switchView('list');
