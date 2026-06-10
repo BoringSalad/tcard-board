@@ -254,7 +254,7 @@ footer{margin-top:24px;color:var(--faint);font-size:12px;text-align:center;line-
 const SUPABASE_URL = 'https://aujyojflrxsebgeexalu.supabase.co';      // ← ersetzen
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1anlvamZscnhzZWJnZWV4YWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzg2ODksImV4cCI6MjA5NjY1NDY4OX0.KvJOfb2XKuAGRsNdHeKZBJyqkV8UB3BRkqqYfArnNiY';   // ← ersetzen
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============ CONSTANTS ============
 const STANDS=[
@@ -284,7 +284,7 @@ function setSyncStatus(state){
 
 /* ---------- SUPABASE: Cards ---------- */
 async function loadCards(){
-  const {data:rows, error} = await supabase.from('cards').select('*');
+  const {data:rows, error} = await sb.from('cards').select('*');
   if(error){console.error(error);setSyncStatus('offline');return;}
   data = rows.map(r=>({id:r.id, teststand:r.teststand, datum:r.datum, name:r.name, anz:r.anz, projekt:r.projekt}));
   setSyncStatus('connected');
@@ -294,19 +294,19 @@ async function loadCards(){
 async function addCard(card){
   setSyncStatus('syncing');
   const {id, ...rest} = card;
-  const {error} = await supabase.from('cards').insert({id, ...rest});
+  const {error} = await sb.from('cards').insert({id, ...rest});
   if(error) console.error(error);
 }
 
 async function updateCard(id, updates){
   setSyncStatus('syncing');
-  const {error} = await supabase.from('cards').update(updates).eq('id',id);
+  const {error} = await sb.from('cards').update(updates).eq('id',id);
   if(error) console.error(error);
 }
 
 async function deleteCard(id){
   setSyncStatus('syncing');
-  const {error} = await supabase.from('cards').delete().eq('id',id);
+  const {error} = await sb.from('cards').delete().eq('id',id);
   if(error) console.error(error);
 }
 
@@ -319,23 +319,23 @@ async function loadUsersFromDB(){
 }
 
 async function addUserToDB(name, color){
-  const {error} = await supabase.from('users').insert({name, color});
+  const {error} = await sb.from('users').insert({name, color});
   if(error) console.error(error);
 }
 
 async function updateUserColor(name, color){
-  const {error} = await supabase.from('users').update({color}).eq('name',name);
+  const {error} = await sb.from('users').update({color}).eq('name',name);
   if(error) console.error(error);
 }
 
 async function removeUserFromDB(name){
-  const {error} = await supabase.from('users').delete().eq('name',name);
+  const {error} = await sb.from('users').delete().eq('name',name);
   if(error) console.error(error);
 }
 
 /* ---------- SUPABASE: Realtime ---------- */
 function subscribeRealtime(){
-  supabase.channel('cards-changes')
+  sb.channel('cards-changes')
     .on('postgres_changes',{event:'*',schema:'public',table:'cards'}, payload=>{
       if(payload.eventType==='INSERT'){
         const r=payload.new;
