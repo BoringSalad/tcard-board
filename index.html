@@ -736,11 +736,13 @@ fillStandSelects();fillUserSelect();renderListHead();renderLegend();
 winStart=defaultWin();
 initBoardSelection();
 
-// Starte Supabase
+// Starte Supabase — sequentiell laden!
 setSyncStatus('syncing');
-loadUsersFromDB();
-loadCards();
-subscribeRealtime();
+
+(async function init(){
+  await loadUsersFromDB();   // ← Users ZUERST laden
+  await loadCards();         // ← Dann Karten (ruft refresh() auf)
+  subscribeRealtime();       // ← Dann Realtime starten
 </script>
 </body>
 </html>
