@@ -743,6 +743,7 @@ setSyncStatus('syncing');
   await loadUsersFromDB();   // ← Users ZUERST laden
   await loadCards();         // ← Dann Karten (ruft refresh() auf)
   subscribeRealtime();       // ← Dann Realtime starten
+})();
 </script>
 </body>
 </html>
